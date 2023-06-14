@@ -17,7 +17,9 @@ function renderTodos() {
     const completedClass = todo.completed ? "completed" : "";
     li.innerHTML = `
     <span class="todo-number">${index + 1}.</span>
-      <span class="todo-text ${completedClass}">${todo.title}</span>
+      <span class="todo-text ${completedClass}" data-index="${index}">${
+      todo.title
+    }</span>
       <div class="todo-actions">
         <button class="edit-btn">Edit</button>
         <span class="todo-delete">X</span>
@@ -54,9 +56,27 @@ function toggleTodoComplete(index) {
 }
 
 // Function to edit a todo
-function editTodo(index, newTitle) {
-  todos[index].title = newTitle;
-  renderTodos();
+function editTodo(element, index) {
+  const textElement = element.querySelector(".todo-text");
+  const todoText = textElement.textContent;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = todoText;
+  input.classList.add("edit-input");
+  textElement.replaceWith(input);
+  input.focus();
+  input.addEventListener("blur", () => {
+    const newTitle = input.value.trim();
+    if (newTitle !== "") {
+      todos[index].title = newTitle;
+      renderTodos();
+    }
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      input.blur();
+    }
+  });
 }
 
 // Function to clear completed todos
@@ -98,7 +118,9 @@ function renderFilteredTodos(completed) {
     const completedClass = todo.completed ? "completed" : "";
     li.innerHTML = `
     <span class="todo-number">${index + 1}.</span>
-      <span class="todo-text ${completedClass}">${todo.title}</span>
+      <span class="todo-text ${completedClass}" data-index="${index}">${
+      todo.title
+    }</span>
       <div class="todo-actions">
         <button class="edit-btn">Edit</button>
         <span class="todo-delete">X</span>
@@ -132,11 +154,7 @@ todoList.addEventListener("click", function (event) {
   if (event.target.classList.contains("edit-btn")) {
     const li = event.target.parentElement.parentElement;
     const index = Array.from(todoList.children).indexOf(li);
-    const todoText = li.querySelector(".todo-text").textContent;
-    const newTitle = prompt("Edit Todo:", todoText);
-    if (newTitle && newTitle.trim() !== "") {
-      editTodo(index, newTitle.trim());
-    }
+    editTodo(li, index);
   }
 });
 
