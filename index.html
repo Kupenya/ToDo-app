@@ -11,9 +11,15 @@
     <h1>TODO App</h1>
     <form id="todo-form">
       <input type="text" id="todo-input" placeholder="Add a new todo">
-      <button type="submit">Add</button>
+      <button class="add" type="submit">Add</button>
     </form>
+    <div class="filters">
+      <button class="filter-btn" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="active">Active</button>
+      <button class="filter-btn" data-filter="completed">Completed</button>
+    </div>
     <ul id="todo-list"></ul>
+    <button class="complete"  id="clear-btn">Clear Completed</button>
   </div>
 
   <script src="index.js"></script>
